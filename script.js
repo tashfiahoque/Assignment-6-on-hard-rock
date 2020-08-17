@@ -42,25 +42,32 @@ function showData(data){
 //event listener in get lyrics button
 searchResults.addEventListener('click', e=>{
     const clickedElement = e.target;
+    contentArea.style.display = 'none';
+    lyricsShow.style.display = 'block';
     //checking clicked elemet is button or not
         if (clickedElement.tagName === 'BUTTON'){
             const artist = clickedElement.getAttribute('data-artist');
             const songTitle = clickedElement.getAttribute('data-songtitle');   
             getLyrics(artist, songTitle);
         }
-    contentArea.style.display = 'none';
-    lyricsShow.style.display = 'block';
+    
 })
 // Get lyrics for song
 async function getLyrics(artist, songTitle) {
     const res = await fetch(`${apiURL}/v1/${artist}/${songTitle}`);
     const data = await res.json();
-    const lyrics = data.lyrics.replace(/(\r\n|\r|\n)/g, '<br>');
+        if(data.lyrics == null){
+            alert("Sorry, this song's lyrics is not available");
+            contentArea.style.display = 'block';
+            lyricsShow.innerHTML = '';
+        }else{
+            const lyrics = data.lyrics.replace(/(\r\n|\r|\n)/g, '<br>');
             lyricsShow.innerHTML = ` <div class="single-lyrics text-center">
                                 <button onclick="goBack()" class="btn1 btn-success">Go Back</button>
                                 <h2 class="text-success mb-4"><strong>${artist}</strong> - ${songTitle}</h2>
                                 <pre class="lyric text-white">${lyrics}</pre>
-                                </div>`;
+                                                </div>`;
+        }
 }
 //Go back to main window
 function goBack(){
