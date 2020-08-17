@@ -6,7 +6,9 @@ body{
     background-size: 100%;
     background-position: top;
 }
-
+#content-area{
+    display: block;
+}
 .form-control{
     background-color:rgba(255, 255, 255, 0.2);
     padding: 22px;
@@ -38,4 +40,14 @@ body{
     background: rgba(255, 255, 255, 0.2);
     border-radius: 15px;
 }
-
+#lyrics-show{
+    display: none;
+}
+.btn1{
+    float: right;
+    margin-top: 30px;
+    padding: 10px 80px;
+    border-radius: 2.5rem;
+    font-size: 20px;
+    font-weight: 700;
+}

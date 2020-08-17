@@ -1,6 +1,8 @@
+const contentArea = document.getElementById("content-area");
 const searchArea = document.getElementById("search-area");
 const searchButton = document.getElementById("search-button");
 const searchResults = document.getElementById("search-results");
+const lyricsShow = document.getElementById("lyrics-show");
 const apiURL = 'https://api.lyrics.ovh';
 /// adding event listener in form
 
@@ -15,12 +17,12 @@ searchArea.addEventListener('submit', e=> {
     else{ 
         searchSong(searchValue);
     }
+    searchArea.reset();
 })
 //search song 
 async function searchSong(searchValue){
     const searchResults = await fetch(`${apiURL}/suggest/${searchValue}`)
-    const data = await searchResults.json();
-    
+    const data = await searchResults.json();  
     showData(data);
 }
 
@@ -28,15 +30,26 @@ async function searchSong(searchValue){
 function showData(data){
     searchResults.innerHTML = `
     <div class="song-list">
+      ${data.data.slice(0, 10).map(song=>`<div class="single-result row align-items-center my-3 p-3">
+                                            <div class="col-md-9">
+                                            <h3 class="lyrics-name">${song.title}</h3>
+                                            <p class="author lead">Album by <span>${song.artist.name}</span></p>
+                                            </div>
+                                            <div class="col-md-3 text-md-right text-center">
+                                            <button class="btn btn-success" data-artist="${song.artist.name}" data-songtitle="${song.title}">Get Lyrics</button>
+                                         </div>
+                                         </div>`
+    /*searchResults.innerHTML = `
+    <div class="song-list">
       ${data.data.slice(0, 10).map(song=> `<p class="author lead">
                         <strong>${song.title}</strong> Album By
                         <span>${song.artist.name}</span> 
                         <button class="btn btn-success" data-artist="${song.artist.name}" data-songtitle="${song.title}"> get lyrics </button>
-                </p>`
+                </p>`*/
         )
         .join('')}
-    </div>
-  `;
+    
+    </div>`;
 }
 //event listener in get lyrics button
 searchResults.addEventListener('click', e=>{
@@ -49,15 +62,23 @@ searchResults.addEventListener('click', e=>{
         
         getLyrics(artist, songTitle);
     }
+    contentArea.style.display = 'none';
+    lyricsShow.style.display = 'block';
 })
 // Get lyrics for song
 async function getLyrics(artist, songTitle) {
     const res = await fetch(`${apiURL}/v1/${artist}/${songTitle}`);
     const data = await res.json();
-  
     const lyrics = data.lyrics.replace(/(\r\n|\r|\n)/g, '<br>');
-  
-    searchResults.innerHTML = `<h2 class="text-success mb-4"><strong>${artist}</strong> - ${songTitle}</h2>
-    <pre class="lyric text-white">${lyrics}</pre>`;
-  
+    
+    lyricsShow.innerHTML = ` <div class="single-lyrics text-center">
+                                <button onclick="goBack()" class="btn1 btn-success">Go Back</button>
+                                <h2 class="text-success mb-4"><strong>${artist}</strong> - ${songTitle}</h2>
+                                <pre class="lyric text-white">${lyrics}</pre>
+                                </div>`;
   }
+//Go back to main window
+function goBack(){
+    contentArea.style.display = 'block';
+    lyricsShow.style.display = 'none';
+} 
