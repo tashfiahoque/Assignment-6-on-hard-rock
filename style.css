@@ -15,14 +15,51 @@ body{
     border: none;
     border-radius: 25px;
 }
+#text-design{
+    letter-spacing: 5px;
+    animation: text 3s 1;
+}
+@keyframes text{
+    0%{
+        margin-bottom: -40px;
+    }
+    30%{
+        letter-spacing: 12px;
+        margin-bottom: -40px;
+    }
+    85%{
+        letter-spacing: 3px;
+        margin-bottom: -40px;
+    }
+}
 .btn{
     border-radius: 1.5rem;
     padding: 9px 20px;
 }
-
-.btn-privious{
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+.btn2{
+    background: none;
+    border-radius: 1.5rem;
+    padding: 9px 20px;
+    transition: color 0.4s linear;
+    position: relative;
+}
+.btn2:hover{
+    color: black;
+}
+.btn2::before{
+    content: '';
+    position: absolute;
+    background: #0FBB5D;
+    z-index: -1;
+    transition: transform 0.5s;
+    transform-origin: 0 0;
+    transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+}
+.btn2::before{
+    transform: scaleY(0);
+}
+.btn2:hover::before{
+    transform: scaleY(1);
 }
 .navbar-toggler {
     border: none;
@@ -50,4 +87,12 @@ body{
     border-radius: 2.5rem;
     font-size: 20px;
     font-weight: 700;
+    border: none;
+    transition: 0.2s;
+}
+.btn1:hover{
+    color: #17112D;
+    background: #0FBB5D;
+    box-shadow: 0px 0px 10px #0FBB5D, 0px 0px 40px #0FBB5D, 0px 0px 80px #0FBB5D;
+    transition-delay: 10ms;
 }
